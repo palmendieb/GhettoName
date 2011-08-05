@@ -1,6 +1,8 @@
 module GhettoName (
           ghettoName
+        , prettyGhettoName
         , charGhettoM
+        , sentence
         ) where
 
 import Data.Char (toUpper, toLower)
@@ -14,6 +16,14 @@ data GhettoName = GhettoName {
 
 ghettoName :: String -> GhettoName
 ghettoName realName = GhettoName realName $ prettyGhettoName realName
+
+prettyGhettoName name = let ghettoName = nameToGhetto name
+                        in (toUpper $ head ghettoName) : tail ghettoName
+
+
+nameToGhetto name = concat $ map lookupNKeepC name
+
+sentence = unwords . map prettyGhettoName . words
 
 charGhettoM = [('A', "sha"),
                ('B', "ni"),
@@ -44,9 +54,6 @@ charGhettoM = [('A', "sha"),
 
 ghettoCharM = map (\(a, b) -> (b, a)) charGhettoM
 
-
-nameToGhetto name = concat $ map lookupNKeepC name
-
 lookupC :: Char -> Maybe String
 lookupC c = lookup (toUpper c) charGhettoM 
 
@@ -59,16 +66,8 @@ lookupNKeepC c = let result = lookupC c
                     Just str -> str
                                 
 
--- for use with foldl
-unMaybe :: [a] -> Maybe [a] -> [a]
-unMaybe acc (Just new) = acc ++ new
-unMaybe acc Nothing = acc
-
-prettyGhettoName name = let ghettoName = nameToGhetto name
-                        in (toUpper $ head ghettoName) : tail ghettoName
-
--- for names with length 4
-sentence = unwords . map prettyGhettoName . words
-
 splitGhettoName :: String -> [String]
 splitGhettoName ghettoName = filter (`isInfixOf` ghettoName) (map snd charGhettoM)
+
+--TODO: add ghettoName -> realName
+--TODO: add main bla
