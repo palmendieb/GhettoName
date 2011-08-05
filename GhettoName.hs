@@ -10,8 +10,8 @@ import Data.List (isInfixOf)
 import Control.Monad
 
 data GhettoName = GhettoName {
-       gRealName :: String,
-       gName :: String
+         gRealName :: String
+       , gName :: String
       } deriving (Show, Eq, Ord)
 
 ghettoName :: String -> GhettoName
@@ -21,6 +21,7 @@ prettyGhettoName name = let ghettoName = nameToGhetto name
                         in (toUpper $ head ghettoName) : tail ghettoName
 
 
+-- main function: creates your ghettoname
 nameToGhetto name = concat $ map lookupNKeepC name
 
 sentence = unwords . map prettyGhettoName . words
